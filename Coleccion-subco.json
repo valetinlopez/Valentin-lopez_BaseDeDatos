@@ -1,0 +1,156 @@
+{
+  "collections": {
+    "users": {
+      "doc_example": {
+        "userId": "user_123",
+        "role": "customer",
+        "email": "ana@example.com",
+        "displayName": "Ana Pérez",
+        "createdAt": "2025-09-24T12:00:00Z",
+        "lastLogin": "2025-09-24T12:05:00Z",
+        "profile": {
+          "photoUrl": "https://.../avatar.jpg",
+          "phone": "+5491112345678"
+        },
+        "addresses": [
+          {
+            "label": "Casa",
+            "street": "Calle 1 123",
+            "city": "CABA",
+            "postalCode": "C1000",
+            "country": "AR"
+          }
+        ],
+        "wallet": { "balance": 0.0 }
+      }
+    },
+    "merchants": {
+      "doc_example": {
+        "merchantId": "merchant_42",
+        "name": "Tienda Ejemplo",
+        "slug": "tienda-ejemplo",
+        "ownerUserId": "user_999",
+        "description": "Vende artículos X",
+        "rating": { "avg": 4.6, "count": 120 },
+        "tags": ["hogar","oferta"],
+        "location": { "lat": -34.60, "lng": -58.38, "address": "Av. Ej." },
+        "createdAt": "2024-01-01T00:00:00Z"
+      },
+      "subcollections": {
+        "products": {
+          "doc_example": {
+            "productId": "prod_abc",
+            "title": "Producto A",
+            "price": 199.99,
+            "currency": "ARS",
+            "stock": 10,
+            "isActive": true
+          }
+        }
+      }
+    },
+    "products": {
+      "doc_example": {
+        "productId": "prod_abc",
+        "merchantId": "merchant_42",
+        "merchantSnapshot": { "merchantId": "merchant_42", "name": "Tienda Ejemplo", "slug": "tienda-ejemplo" },
+        "title": "Cafetera Super",
+        "slug": "cafetera-super",
+        "description": "Cafetera 1.5L, automática",
+        "sku": "CAF-001",
+        "price": 149.99,
+        "currency": "USD",
+        "stock": 25,
+        "images": ["https://.../1.jpg"],
+        "tags": ["cocina","electro"],
+        "categories": ["Electrodomésticos"],
+        "variants": [
+          { "id": "v1", "sku": "CAF-001-B", "price": 149.99, "stock": 10, "attributes": { "color": "negro" } }
+        ],
+        "createdAt": "2024-11-01T09:00:00Z",
+        "isActive": true,
+        "rating": { "avg": 4.7, "count": 88 },
+        "salesCount": 420,
+        "promotions": [
+          { "promoId": "promo_x", "discountPercent": 10, "activeUntil": "2025-12-31T23:59:59Z" }
+        ]
+      },
+      "subcollections": {
+        "reviews": {
+          "doc_example": {
+            "reviewId": "rev_101",
+            "userId": "user_123",
+            "rating": 5,
+            "title": "Excelente",
+            "body": "Muy buena calidad.",
+            "createdAt": "2025-09-20T12:00:00Z"
+          }
+        }
+      }
+    },
+    "orders": {
+      "doc_example": {
+        "orderId": "order_20250924_001",
+        "userId": "user_123",
+        "userSnapshot": { "userId": "user_123", "displayName": "Ana Pérez", "email": "ana@example.com" },
+        "items": [
+          {
+            "productId": "prod_abc",
+            "title": "Cafetera Super",
+            "priceAtPurchase": 149.99,
+            "quantity": 1,
+            "merchantId": "merchant_42",
+            "image": "https://.../1.jpg"
+          }
+        ],
+        "subtotal": 149.99,
+        "shipping": 10.0,
+        "discount": 0.0,
+        "total": 159.99,
+        "currency": "USD",
+        "status": "paid",
+        "paymentMethod": { "type": "card", "provider": "Stripe", "txnId": "txn_789" },
+        "fulfillment": { "address": "Calle 1 123, CABA", "carrier": "ShipIt", "trackingNumber": "TRK123" },
+        "createdAt": "2025-09-24T12:30:00Z"
+      },
+      "subcollections": {
+        "events": {
+          "doc_example": {
+            "timestamp": "2025-09-24T12:31:00Z",
+            "type": "status_change",
+            "byUserId": "user_123",
+            "fromStatus": "pending",
+            "toStatus": "paid",
+            "note": "Pago confirmado"
+          }
+        }
+      }
+    },
+    "promotions": {
+      "doc_example": {
+        "promoId": "promo_blackfri",
+        "title": "Black Friday 20%",
+        "type": "percent",
+        "value": 20,
+        "appliesTo": { "scope": "global", "ids": [] },
+        "startDate": "2025-11-25T00:00:00Z",
+        "endDate": "2025-11-27T23:59:59Z",
+        "active": true
+      }
+    }
+  },
+  "indices": {
+    "products": [
+      ["isActive","tags","price"],
+      ["merchantId","isActive","price"],
+      ["tags","rating.avg","price"]
+    ],
+    "orders": [
+      ["userId","createdAt_desc"],
+      ["merchantId","status","createdAt_desc"]
+    ],
+    "promotions": [
+      ["active","startDate","endDate"]
+    ]
+  }
+}
